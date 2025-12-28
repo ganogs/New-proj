@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GN</title>
+
+  <!-- Font Awesome for icons -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+  />
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f2f5;
+      color: #333;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #222;
+      margin-bottom: 30px;
+    }
+
+    .post {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+
+    .post h2 {
+      margin-top: 0;
+      color: #222;
+    }
+
+    .post-content {
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      padding: 12px;
+      min-height: 100px;
+      margin-bottom: 15px;
+    }
+
+    .upload-container {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+
+    input[type="file"] { display: none; }
+
+    .upload-label {
+      display: inline-block;
+      background: #0077b5;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: opacity 0.2s;
+    }
+
+    .upload-label:hover { opacity: 0.9; }
+
+    img.preview {
+      display: none;
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    .share-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 15px;
+    }
+
+    .share-buttons a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-width: 130px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    .facebook { background: #3b5998; }
+    .twitter { background: #000000; }
+    .linkedin { background: #0077b5; }
+    .whatsapp { background: #25d366; }
+
+    .share-buttons a:hover {
+      transform: translateY(-2px);
+      opacity: 0.9;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.9em;
+      color: #777;
+    }
+
+    @media (max-width: 600px) {
+      .share-buttons a { width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+  <h1>📝 New post</h1>
+
+  <!-- POSTS CONTAINER -->
+  <div id="posts-container"></div>
+
+  <!-- ADD NEW POST BUTTON -->
+  <div style="text-align:center;">
+    <button id="add-post-btn" style="
+      background:#0077b5; color:white; border:none;
+      padding:12px 20px; border-radius:6px; cursor:pointer;
+      font-weight:600;">+ Add New Post</button>
+  </div>
+
+  <footer>© 2025 My Blog. All rights reserved.</footer>
+
+  <script>
+    const postsContainer = document.getElementById('posts-container');
+    const addPostBtn = document.getElementById('add-post-btn');
+
+    // Load posts from localStorage
+    let posts = JSON.parse(localStorage.getItem('multiPosts')) || [];
+
+    function savePosts() {
+      localStorage.setItem('multiPosts', JSON.stringify(posts));
+    }
+
+    function createPostElement(post, index) {
+      const postEl = document.createElement('div');
+      postEl.className = 'post';
+      postEl.innerHTML = `
+        <h2 contenteditable="true" class="post-title">${post.title || 'New Post'}</h2>
+        <div class="post-content" contenteditable="true">${post.text || '✏️ Write your content here...'}</div>
+
+        <div class="upload-container">
+          <label class="upload-label" for="image-upload-${index}">
+            <i class="fa-solid fa-upload"></i> Upload Image
+          </label>
+          <input type="file" id="image-upload-${index}" accept="image/*" />
+          <img src="${post.image || ''}" class="preview" style="display:${post.image ? 'block' : 'none'}" />
+        </div>
+
+        <div class="share-buttons">
+          <a class="facebook" target="_blank"><i class="fab fa-facebook-f"></i> Facebook</a>
+          <a class="twitter" target="_blank"><i class="fab fa-x-twitter"></i> X</a>
+          <a class="linkedin" target="_blank"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+          <a class="whatsapp" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+        </div>
+      `;
+
+      // Handle edits
+      const titleEl = postEl.querySelector('.post-title');
+      const textEl = postEl.querySelector('.post-content');
+      const fileInput = postEl.querySelector(`#image-upload-${index}`);
+      const preview = postEl.querySelector('.preview');
+
+      titleEl.addEventListener('input', () => {
+        posts[index].title = titleEl.innerText;
+        savePosts();
+        updateShareLinks(postEl, index);
+      });
+
+      textEl.addEventListener('input', () => {
+        posts[index].text = textEl.innerHTML;
+        savePosts();
+      });
+
+      // Image upload
+      fileInput.addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          preview.src = evt.target.result;
+          preview.style.display = 'block';
+          posts[index].image = evt.target.result;
+          savePosts();
+        };
+        reader.readAsDataURL(file);
+      });
+
+      // Share buttons
+      updateShareLinks(postEl, index);
+
+      return postEl;
+    }
+
+    function updateShareLinks(postEl, index) {
+      const pageURL = encodeURIComponent(window.location.href + `#post${index}`);
+      const title = encodeURIComponent(posts[index].title || 'My Blog Post');
+
+      postEl.querySelector('.facebook').href =
+        `https://www.facebook.com/ganapathyoff/}`;
+      postEl.querySelector('.twitter').href =
+        `https://x.com/Ganapathyoff/tweet?url=${pageURL}&text=${title}`;
+      postEl.querySelector('.linkedin').href =
+        `https://www.linkedin.com/shareArticle?mini=true&url=${pageURL}&title=${title}`;
+      postEl.querySelector('.whatsapp').href =
+        `https://api.whatsapp.com/send?text=${title}%20${pageURL}`;
+    }
+
+    function renderPosts() {
+      postsContainer.innerHTML = '';
+      posts.forEach((post, index) => {
+        const el = createPostElement(post, index);
+        postsContainer.appendChild(el);
+      });
+    }
+
+    addPostBtn.addEventListener('click', () => {
+      posts.push({ title: 'New Post', text: '', image: '' });
+      savePosts();
+      renderPosts();
+    });
+
+    renderPosts();
+  </script>
+</body>
+</html>
