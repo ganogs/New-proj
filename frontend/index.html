@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Media Sharer - New Post</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+  <div class="container">
+    <h1><i class="fas fa-edit"></i> New Post</h1>
+    
+    <form id="post-form" class="post-form">
+      <div class="form-group">
+        <textarea id="post-text" placeholder="What's on your mind?..." required></textarea>
+      </div>
+      
+      <div class="upload-section">
+        <label for="image-upload" class="upload-btn">
+          <i class="fas fa-upload"></i> Upload Image
+        </label>
+        <input type="file" id="image-upload" accept="image/*">
+        <img id="image-preview" class="image-preview" style="display: none;">
+      </div>
+      
+      <div class="share-buttons">
+        <button type="button" id="share-facebook" class="share-btn facebook" disabled>
+          <i class="fab fa-facebook-f"></i> Facebook
+        </button>
+        <button type="button" id="share-linkedin" class="share-btn linkedin" disabled>
+          <i class="fab fa-linkedin-in"></i> LinkedIn
+        </button>
+        <button type="button" id="share-whatsapp" class="share-btn whatsapp" disabled>
+          <i class="fab fa-whatsapp"></i> WhatsApp
+        </button>
+      </div>
+      
+      <div id="message" class="message"></div>
+    </form>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
