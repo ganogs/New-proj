@@ -28,6 +28,9 @@
         <button type="button" id="share-facebook" class="share-btn facebook" disabled>
           <i class="fab fa-facebook-f"></i> Facebook
         </button>
+        <button type="button" id="share-twitter" class="share-btn twitter" disabled>
+          <i class="fab fa-x-twitter"></i> X
+        </button>
         <button type="button" id="share-linkedin" class="share-btn linkedin" disabled>
           <i class="fab fa-linkedin-in"></i> LinkedIn
         </button>
@@ -41,5 +44,12 @@
   </div>
 
   <script src="script.js"></script>
+  <script>
+    // Check authentication on page load
+    const token = localStorage.getItem('token');
+    if (!token) {
+      window.location.href = '/login';
+    }
+  </script>
 </body>
 </html>

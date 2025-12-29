@@ -47,13 +47,27 @@ document.addEventListener('DOMContentLoaded', function() {
       formData.append('image', imageFile);
     }
 
+    const token = localStorage.getItem('token');
+    if (!token) {
+      showMessage('You must be logged in to create a post.', 'error');
+      return;
+    }
+
     try {
       const response = await fetch('http://localhost:3000/api/posts', {
         method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
         body: formData
       });
 
       if (!response.ok) {
+        if (response.status === 401) {
+          localStorage.removeItem('token');
+          window.location.href = '/login';
+          return;
+        }
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 

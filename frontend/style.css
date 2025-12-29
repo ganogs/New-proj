@@ -120,6 +120,10 @@ h1 {
   background: #25D366;
 }
 
+.twitter {
+  background: #000;
+}
+
 .share-btn:not(:disabled):hover {
   opacity: 0.9;
 }
