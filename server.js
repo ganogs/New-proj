@@ -28,14 +28,14 @@ async function poll(){
   try{
    const res=await fetch(feed.url,{headers:{'user-agent':'MakkalShortNews/1.0 RSS reader'},signal:AbortSignal.timeout(18000)});
    if(!res.ok)throw new Error('HTTP '+res.status);
-   const xml=await res.text(); const entries=[...xml.matchAll(/<(item|entry)(?:\\s[^>]*)?>([\\s\\S]*?)<\\/\\1>/gi)].map(m=>m[2]).slice(0,20);
+   const xml=await res.text(); const entries=[]; const itemRe=new RegExp('<(item|entry)\\b[\\s\\S]*?</\\1>','gi'); let itemMatch; while((itemMatch=itemRe.exec(xml))&&entries.length<20) entries.push(itemMatch[0]);
    for(const item of entries){
     let title=tag(item,'title'); let link=tag(item,'link');
     if(!link){const lm=item.match(/<link[^>]+href=["']([^"']+)/i);link=lm?lm[1]:'';}
     const description=tag(item,'description')||tag(item,'summary')||tag(item,'content:encoded');
     if(!title||!link||store.news.some(n=>n.link===link)||store.news.some(n=>n.originalTitle.toLowerCase()===title.toLowerCase()))continue;
     const ai=await aiRewrite(title,description);
-    const clean=(ai?.summary||description||title).replace(/\\s+/g,' ').slice(0,600);
+    const clean=(ai?.summary||description||title).split(/\s+/).join(' ').slice(0,600);
     store.news.unshift({id:crypto.randomUUID(),title:ai?.title||title,originalTitle:title,summary:clean,link,source:feed.name,category:category(title+' '+description),status:store.settings.autoPublish?'published':'draft',createdAt:new Date().toISOString(),publishedAt:store.settings.autoPublish?new Date().toISOString():null});
     added++;
    }
@@ -58,9 +58,10 @@ const server=http.createServer(async(req,res)=>{
    if(!auth(req))return send(res,401,{error:'Admin password required'});
    if(p==='/api/admin/overview')return send(res,200,{news:store.news,feeds:store.feeds,settings:store.settings,lastPoll:store.lastPoll,logs:store.logs,aiEnabled:!!process.env.GEMINI_API_KEY});
    if(p==='/api/admin/poll'&&req.method==='POST')return send(res,200,await poll());
-   if(p==='/api/admin/feeds'&&req.method==='PUT'){const b=await body(req);store.feeds=(b.feeds||[]).filter(f=>f.name&&/^https?:\\/\\//.test(f.url));await save();return send(res,200,{feeds:store.feeds});}
+   if(p==='/api/admin/feeds'&&req.method==='PUT'){const b=await body(req);store.feeds=(b.feeds||[]).filter(f=>{if(!f.name||!f.url)return false;try{return ['http:','https:'].includes(new URL(f.url).protocol);}catch{return false;}});await save();return send(res,200,{feeds:store.feeds});}
    if(p==='/api/admin/settings'&&req.method==='PUT'){const b=await body(req);store.settings={...store.settings,autoPublish:!!b.autoPublish,pollMinutes:Math.max(2,Math.min(60,Number(b.pollMinutes)||5))};await save();return send(res,200,store.settings);}
-   const match=p.match(/^\\/api\\/admin\\/news\\/([^/]+)$/);
+   const newsId=p.startsWith('/api/admin/news/')?decodeURIComponent(p.slice('/api/admin/news/'.length)):null;
+   if(newsId){const n=store.news.find(x=>x.id===newsId);if(!n)return send(res,404,{error:'Not found'});if(req.method==='PUT'){Object.assign(n,await body(req));await save();return send(res,200,n);}if(req.method==='DELETE'){store.news=store.news.filter(x=>x.id!==n.id);await save();return send(res,200,{ok:true});}}
    if(match){const n=store.news.find(x=>x.id===match[1]);if(!n)return send(res,404,{error:'Not found'});if(req.method==='PUT'){Object.assign(n,await body(req));await save();return send(res,200,n);}if(req.method==='DELETE'){store.news=store.news.filter(x=>x.id!==n.id);await save();return send(res,200,{ok:true});}}
    return send(res,404,{error:'Unknown admin endpoint'});
   }
