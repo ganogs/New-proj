@@ -62,7 +62,6 @@ const server=http.createServer(async(req,res)=>{
    if(p==='/api/admin/settings'&&req.method==='PUT'){const b=await body(req);store.settings={...store.settings,autoPublish:!!b.autoPublish,pollMinutes:Math.max(2,Math.min(60,Number(b.pollMinutes)||5))};await save();return send(res,200,store.settings);}
    const newsId=p.startsWith('/api/admin/news/')?decodeURIComponent(p.slice('/api/admin/news/'.length)):null;
    if(newsId){const n=store.news.find(x=>x.id===newsId);if(!n)return send(res,404,{error:'Not found'});if(req.method==='PUT'){Object.assign(n,await body(req));await save();return send(res,200,n);}if(req.method==='DELETE'){store.news=store.news.filter(x=>x.id!==n.id);await save();return send(res,200,{ok:true});}}
-   if(match){const n=store.news.find(x=>x.id===match[1]);if(!n)return send(res,404,{error:'Not found'});if(req.method==='PUT'){Object.assign(n,await body(req));await save();return send(res,200,n);}if(req.method==='DELETE'){store.news=store.news.filter(x=>x.id!==n.id);await save();return send(res,200,{ok:true});}}
    return send(res,404,{error:'Unknown admin endpoint'});
   }
   if(p==='/'||p==='/admin'||p.startsWith('/assets/')){
