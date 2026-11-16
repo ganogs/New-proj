@@ -1,0 +1,24 @@
+{
+  "id": "/",
+  "name": "மக்கள் Short News",
+  "short_name": "மக்கள் News",
+  "description": "தமிழில் முக்கியச் செய்திகளை சில வரிகளில் உடனுக்குடன் படியுங்கள்.",
+  "lang": "ta",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#faf9ff",
+  "theme_color": "#25105a",
+  "categories": [
+    "news"
+  ],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
