@@ -1,0 +1,8 @@
+{
+  "name": "makkal-short-news",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Tamil AI-powered RSS short news and CMS",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=20" }
+}
