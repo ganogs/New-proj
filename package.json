@@ -3,6 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "description": "Tamil AI-powered RSS short news and CMS",
-  "scripts": { "start": "node server.js" },
-  "engines": { "node": ">=20" }
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "pg": "^8.16.3"
+  }
 }
