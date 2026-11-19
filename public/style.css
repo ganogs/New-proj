@@ -18,3 +18,5 @@
 .popular{max-width:1120px;margin:0 auto 34px;padding:18px 22px;border:1px solid #e4e8ee;background:#fff;border-radius:8px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:#14243a;font-size:13px}
 .popular span{color:#647386}
 @media(max-width:760px){.main-nav{top:66px;justify-content:flex-start}.breaking{font-size:11px}.breaking span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
+
+.image-credit{display:block;margin:-7px 0 13px 2px;color:#8a8298;font-size:11px;line-height:1.5;font-weight:600}
