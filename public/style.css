@@ -20,3 +20,35 @@
 @media(max-width:760px){.main-nav{top:66px;justify-content:flex-start}.breaking{font-size:11px}.breaking span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
 
 .image-credit{display:block;margin:-7px 0 13px 2px;color:#8a8298;font-size:11px;line-height:1.5;font-weight:600}
+
+/* Makkal Short News — vibrant editorial refresh */
+:root{--purple:#142b52;--pink:#ef3f63;--orange:#ff9d2e;--cyan:#08a7b5}
+body{background:#f4f7fc;color:#182b49}
+.top-strip{background:linear-gradient(90deg,#102a52,#174b79 58%,#e83d5c);padding:9px 14px}
+.top{background:linear-gradient(105deg,#102a52 0%,#174b79 70%,#1a6c83 100%);box-shadow:0 8px 28px #12335b28}
+.brand-mark{background:linear-gradient(145deg,#ffb13d,#f04462);border-radius:14px;box-shadow:0 7px 18px #f0446244}
+.brand b{color:#ffbd4a}
+.adminlink{background:linear-gradient(110deg,#ff9d2e,#f04462);box-shadow:0 7px 18px #e94b5d35}
+.main-nav{top:76px;border-bottom:1px solid #e5ebf4;background:#ffffffed;backdrop-filter:blur(14px)}
+.main-nav a{padding:16px 15px}
+.main-nav a:hover{color:#e83d5c;border-bottom-color:#e83d5c}
+.hero{background:radial-gradient(circle at 82% 18%,#ffb33c 0,transparent 24%),linear-gradient(118deg,#102a52 0%,#17618a 56%,#e94361 100%);border-radius:26px;min-height:380px;box-shadow:0 20px 55px #173c7029}
+.hero:after{content:"";position:absolute;width:330px;height:330px;right:7%;bottom:-220px;border-radius:50%;background:#ffb13d;opacity:.24}
+.hero h1 em{color:#ffc75d}.hero p{color:#eef7ff}.hero-pills span{background:#ffffff20;border-color:#ffffff40}
+.art-card{background:linear-gradient(145deg,#fff,#fff2d8);color:#13345b;box-shadow:0 20px 44px #0a1c3d66}.art-card span{color:#e94361}
+.breaking{border:0;border-radius:12px;box-shadow:0 8px 24px #173c7010;background:#fff;min-height:48px}
+.breaking b{background:linear-gradient(110deg,#f04462,#ff9d2e)}
+.section-head .eyebrow{color:#e94361}.section-head h2{color:#142b52;border-left:5px solid #ff9d2e}
+.filters{top:124px;background:#f4f7fced;padding:13px 0 18px}
+.filters button{border-radius:30px;border:1px solid #dce6f2;color:#294363;background:#fff;box-shadow:0 3px 12px #153b6c0b}
+.filters button.active{background:linear-gradient(110deg,#17618a,#e94361);box-shadow:0 7px 18px #e9436130}
+.feed{gap:20px}.story{border:1px solid #e5ebf4;border-radius:18px;padding:18px;box-shadow:0 8px 25px #153b6c0b;background:linear-gradient(180deg,#fff,#fcfdff)}
+.story:hover{box-shadow:0 16px 34px #153b6c18;transform:translateY(-4px)}
+.story-image{height:215px;border-radius:13px;box-shadow:0 6px 18px #173c7014}
+.meta span:first-child{background:#fff0e2;color:#d56c15;border-radius:30px}
+.story h2{color:#142b52;font-size:19px;line-height:1.65}.story p{color:#586b86;line-height:1.95}
+.empty{border:1px dashed #b9cce3;border-radius:18px;background:linear-gradient(135deg,#fff,#f1f7ff);color:#627995}
+.popular{border:1px solid #dce7f4;border-radius:15px;background:linear-gradient(100deg,#fff,#fff4e4);color:#17345a;box-shadow:0 8px 24px #153b6c0a}
+.popular b{color:#e94361}footer{background:linear-gradient(105deg,#102a52,#174b79 70%,#e83d5c);padding:30px 20px}footer b{color:#ffc75d}
+@media(max-width:760px){.main-nav{top:66px}.filters{top:110px}.hero{min-height:390px}.hero-art{opacity:.27}.story-image{height:215px}}
+@media(max-width:520px){.hero{border-radius:20px}.hero h1{font-size:38px}.story{padding:15px}.story-image{height:205px}}
